@@ -1,0 +1,23 @@
+[Script Info]
+ScriptType: v4.00+
+PlayResX: 1280
+PlayResY: 720
+WrapStyle: 0
+ScaledBorderAndShadow: yes
+
+[V4+ Styles]
+Format: Name, Fontname, Fontsize, PrimaryColour, SecondaryColour, OutlineColour, BackColour, Bold, Italic, Underline, StrikeOut, ScaleX, ScaleY, Spacing, Angle, BorderStyle, Outline, Shadow, Alignment, MarginL, MarginR, MarginV, Encoding
+Style: Big, Montserrat,128,&H00FFFFFF,&H000099FF,&H00000000,&H80000000,1,0,0,0,100,100,0,0,1,10,4,5,40,40,40,1
+Style: Mid, Montserrat,52,&H0033FFFF,&H000099FF,&H00000000,&H80000000,1,1,0,0,100,100,0,0,1,5,2,5,40,40,40,1
+Style: Btn, Montserrat,42,&H00FFFFFF,&H000099FF,&H00000000,&H80000000,1,0,0,0,100,100,0,0,1,4,2,5,40,40,40,1
+
+[Events]
+Format: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text
+Dialogue: 0,0:00:00.00,0:00:04.00,Big,,0,0,0,,{\an5\pos(640,250)\fad(200,300)\bord12\shad6\1c&HFFFFFF&\3c&H1A1A1A&\fscx40\fscy40\t(0,600,\fscx100\fscy100)}¡GRACIAS\NPOR VER!
+Dialogue: 0,0:00:00.50,0:00:04.00,Mid,,0,0,0,,{\an5\pos(640,470)\fad(400,300)\bord5\shad2\1c&H33FFFF&\3c&H000000&\b1}Si te gustó, suscríbete
+Dialogue: 0,0:00:00.90,0:00:04.00,Btn,,0,0,0,,{\an5\pos(380,580)\fad(500,300)\bord4\shad3\1c&HFFFFFF&\3c&H3030E0&\b1\bord3}♥  ME GUSTA
+Dialogue: 0,0:00:01.20,0:00:04.00,Btn,,0,0,0,,{\an5\pos(900,580)\fad(500,300)\bord4\shad3\1c&HFFFFFF&\3c&H1010CC&\b1\bord3}▶  SUSCRIBIRSE
+Dialogue: 2,0:00:00.00,0:00:04.00,Big,,0,0,0,,{\an5\pos(140,140)\fs150\1c&HFFCC33&\3c&H000000&\bord4\alpha&H77&\frz-20\fad(300,300)\t(0,3700,\frz340)}★
+Dialogue: 2,0:00:00.00,0:00:04.00,Big,,0,0,0,,{\an5\pos(1140,140)\fs150\1c&HFF66CC&\3c&H000000&\bord4\alpha&H77&\frz20\fad(300,300)\t(0,3700,\frz-340)}✦
+Dialogue: 2,0:00:00.00,0:00:04.00,Big,,0,0,0,,{\an5\pos(140,640)\fs150\1c&H66CCFF&\3c&H000000&\bord4\alpha&H77&\frz30\fad(300,300)\t(0,3700,\frz-330)}✿
+Dialogue: 2,0:00:00.00,0:00:04.00,Big,,0,0,0,,{\an5\pos(1140,640)\fs150\1c&H99FF66&\3c&H000000&\bord4\alpha&H77&\frz-30\fad(300,300)\t(0,3700,\frz330)}✪

@@ -1,0 +1,353 @@
+{
+  "segments": [
+    {
+      "start": 0.0,
+      "end": 12.0,
+      "text": "La casa de Renata Alba hace primero que le dijo Martíador que fue buscado 3 veces naranja"
+    },
+    {
+      "start": 12.05,
+      "end": 23.5,
+      "text": "que no hará falta en muchos años, tendría el gusto no adentrar el aire de la calle en esta casa, haceros comida bien apiadado por ladrillos, puertas y ventanas. Así pasó el gaso en mi abuelo. Mientras podí empezaros a guardar el rapaz."
+    },
+    {
+      "start": 23.55,
+      "end": 35.0,
+      "text": "En el arte ahí me interpiesa de ello con el que podés cortar sablas y embosos. Madra, Abena lo puedas seguir. Lo mismo me das. Pues si no querés gordarlas, irás sin gordado. Total, así la puesta y la vas a pasar."
+    },
+    {
+      "start": 46.0,
+      "end": 58.0,
+      "text": "de que con el cuento a tu padre y no ya buscabas la hembra, la ti tú tú la parabarú eso tiene que la gente que la hace con cosiles. ¿A quién mirabas? ¿Y a quién? A nadie. El presente con una mujer de tu clase vaya con el..."
+    }
+  ],
+  "events": [
+    {
+      "start": 0.0,
+      "end": 4.9411764705882355,
+      "text": "La casa de Renata Alba hace primero",
+      "words": [
+        "La",
+        "casa",
+        "de",
+        "Renata",
+        "Alba",
+        "hace",
+        "primero"
+      ]
+    },
+    {
+      "start": 4.9411764705882355,
+      "end": 9.882352941176471,
+      "text": "que le dijo Martíador que fue buscado",
+      "words": [
+        "que",
+        "le",
+        "dijo",
+        "Martíador",
+        "que",
+        "fue",
+        "buscado"
+      ]
+    },
+    {
+      "start": 9.882352941176471,
+      "end": 12.0,
+      "text": "3 veces naranja",
+      "words": [
+        "3",
+        "veces",
+        "naranja"
+      ]
+    },
+    {
+      "start": 12.05,
+      "end": 13.913953488372094,
+      "text": "que no hará falta en muchos años,",
+      "words": [
+        "que",
+        "no",
+        "hará",
+        "falta",
+        "en",
+        "muchos",
+        "años,"
+      ]
+    },
+    {
+      "start": 13.913953488372094,
+      "end": 15.777906976744188,
+      "text": "tendría el gusto no adentrar el aire",
+      "words": [
+        "tendría",
+        "el",
+        "gusto",
+        "no",
+        "adentrar",
+        "el",
+        "aire"
+      ]
+    },
+    {
+      "start": 15.777906976744188,
+      "end": 17.37558139534884,
+      "text": "de la calle en esta casa,",
+      "words": [
+        "de",
+        "la",
+        "calle",
+        "en",
+        "esta",
+        "casa,"
+      ]
+    },
+    {
+      "start": 17.37558139534884,
+      "end": 18.97325581395349,
+      "text": "haceros comida bien apiadado por ladrillos,",
+      "words": [
+        "haceros",
+        "comida",
+        "bien",
+        "apiadado",
+        "por",
+        "ladrillos,"
+      ]
+    },
+    {
+      "start": 18.97325581395349,
+      "end": 20.837209302325583,
+      "text": "puertas y ventanas. Así pasó el gaso",
+      "words": [
+        "puertas",
+        "y",
+        "ventanas.",
+        "Así",
+        "pasó",
+        "el",
+        "gaso"
+      ]
+    },
+    {
+      "start": 20.837209302325583,
+      "end": 22.701162790697676,
+      "text": "en mi abuelo. Mientras podí empezaros a",
+      "words": [
+        "en",
+        "mi",
+        "abuelo.",
+        "Mientras",
+        "podí",
+        "empezaros",
+        "a"
+      ]
+    },
+    {
+      "start": 22.701162790697676,
+      "end": 23.5,
+      "text": "guardar el rapaz.",
+      "words": [
+        "guardar",
+        "el",
+        "rapaz."
+      ]
+    },
+    {
+      "start": 23.55,
+      "end": 25.458333333333336,
+      "text": "En el arte ahí me interpiesa de",
+      "words": [
+        "En",
+        "el",
+        "arte",
+        "ahí",
+        "me",
+        "interpiesa",
+        "de"
+      ]
+    },
+    {
+      "start": 25.458333333333336,
+      "end": 27.366666666666667,
+      "text": "ello con el que podés cortar sablas",
+      "words": [
+        "ello",
+        "con",
+        "el",
+        "que",
+        "podés",
+        "cortar",
+        "sablas"
+      ]
+    },
+    {
+      "start": 27.366666666666667,
+      "end": 29.275,
+      "text": "y embosos. Madra, Abena lo puedas seguir.",
+      "words": [
+        "y",
+        "embosos.",
+        "Madra,",
+        "Abena",
+        "lo",
+        "puedas",
+        "seguir."
+      ]
+    },
+    {
+      "start": 29.275,
+      "end": 31.18333333333333,
+      "text": "Lo mismo me das. Pues si no",
+      "words": [
+        "Lo",
+        "mismo",
+        "me",
+        "das.",
+        "Pues",
+        "si",
+        "no"
+      ]
+    },
+    {
+      "start": 31.18333333333333,
+      "end": 32.54642857142857,
+      "text": "querés gordarlas, irás sin gordado.",
+      "words": [
+        "querés",
+        "gordarlas,",
+        "irás",
+        "sin",
+        "gordado."
+      ]
+    },
+    {
+      "start": 32.54642857142857,
+      "end": 34.4547619047619,
+      "text": "Total, así la puesta y la vas",
+      "words": [
+        "Total,",
+        "así",
+        "la",
+        "puesta",
+        "y",
+        "la",
+        "vas"
+      ]
+    },
+    {
+      "start": 34.4547619047619,
+      "end": 35.0,
+      "text": "a pasar.",
+      "words": [
+        "a",
+        "pasar."
+      ]
+    },
+    {
+      "start": 46.0,
+      "end": 47.714285714285715,
+      "text": "de que con el cuento a tu",
+      "words": [
+        "de",
+        "que",
+        "con",
+        "el",
+        "cuento",
+        "a",
+        "tu"
+      ]
+    },
+    {
+      "start": 47.714285714285715,
+      "end": 49.42857142857143,
+      "text": "padre y no ya buscabas la hembra,",
+      "words": [
+        "padre",
+        "y",
+        "no",
+        "ya",
+        "buscabas",
+        "la",
+        "hembra,"
+      ]
+    },
+    {
+      "start": 49.42857142857143,
+      "end": 51.142857142857146,
+      "text": "la ti tú tú la parabarú eso",
+      "words": [
+        "la",
+        "ti",
+        "tú",
+        "tú",
+        "la",
+        "parabarú",
+        "eso"
+      ]
+    },
+    {
+      "start": 51.142857142857146,
+      "end": 52.85714285714286,
+      "text": "tiene que la gente que la hace",
+      "words": [
+        "tiene",
+        "que",
+        "la",
+        "gente",
+        "que",
+        "la",
+        "hace"
+      ]
+    },
+    {
+      "start": 52.85714285714286,
+      "end": 54.08163265306123,
+      "text": "con cosiles. ¿A quién mirabas?",
+      "words": [
+        "con",
+        "cosiles.",
+        "¿A",
+        "quién",
+        "mirabas?"
+      ]
+    },
+    {
+      "start": 54.08163265306123,
+      "end": 55.30612244897959,
+      "text": "¿Y a quién? A nadie.",
+      "words": [
+        "¿Y",
+        "a",
+        "quién?",
+        "A",
+        "nadie."
+      ]
+    },
+    {
+      "start": 55.30612244897959,
+      "end": 57.02040816326531,
+      "text": "El presente con una mujer de tu",
+      "words": [
+        "El",
+        "presente",
+        "con",
+        "una",
+        "mujer",
+        "de",
+        "tu"
+      ]
+    },
+    {
+      "start": 57.02040816326531,
+      "end": 58.0,
+      "text": "clase vaya con el...",
+      "words": [
+        "clase",
+        "vaya",
+        "con",
+        "el..."
+      ]
+    }
+  ],
+  "duration": 59.5591875
+}
