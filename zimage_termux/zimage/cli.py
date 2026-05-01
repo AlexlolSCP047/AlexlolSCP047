@@ -1,9 +1,15 @@
-"""`zimage` CLI entry point.
+"""`Zimage` CLI entry point.
 
-Examples:
-    zimage --check
-    zimage --dry-run
-    zimage "a photo of a calico cat on a windowsill" --steps 8 --size 1024 --out cat.png
+Designed for the simplest possible invocation:
+
+    Zimage a calico cat on a windowsill at sunrise
+
+Everything else is baked in: 8 steps, 1024 px, locked negative prompt, mild
+CFG. The only tunables are output path, seed, and image size — and admin
+flags `--check` / `--dry-run` for diagnostics.
+
+The negative prompt lives in `zimage.quality` and is intentionally not
+exposed via any flag. Edit `quality.py` and reinstall to change it.
 """
 
 from __future__ import annotations
@@ -16,28 +22,45 @@ from pathlib import Path
 from . import __version__
 from .npu import NpuUnavailable, assert_htp_alive, ensure_env
 from .pipeline import DEFAULT_CACHE, ZImagePipeline, discover_artifacts
+from .quality import (
+    DEFAULT_GUIDANCE_SCALE,
+    DEFAULT_SIZE,
+    DEFAULT_STEPS,
+    NEGATIVE_PROMPT,
+)
 
 
 def _build_parser() -> argparse.ArgumentParser:
     p = argparse.ArgumentParser(
-        prog="zimage",
-        description="Z-Image-Turbo on Hexagon NPU (Termux, NPU-only).",
+        prog="Zimage",
+        description=(
+            "Z-Image-Turbo on the Hexagon NPU (Termux, NPU-only). "
+            "Usage: Zimage <prompt words...>"
+        ),
+        epilog=(
+            "Quality defaults are baked in (see zimage.quality). "
+            "The negative prompt is not user-editable."
+        ),
     )
-    p.add_argument("prompt", nargs="?", help="Text prompt for generation.")
-    p.add_argument("--steps", type=int, default=8, help="Diffusion steps (default: 8).")
-    p.add_argument("--size", type=int, default=1024, help="Output edge length px (default: 1024).")
+    # nargs='*' so the user can write `Zimage a cat on a windowsill` without
+    # quoting. We join the tokens back into a single prompt string.
+    p.add_argument("prompt", nargs="*", help="Text prompt for generation.")
+    p.add_argument("--size", type=int, default=DEFAULT_SIZE,
+                   help=f"Output edge length px (default: {DEFAULT_SIZE}).")
     p.add_argument("--seed", type=int, default=None, help="RNG seed (default: random).")
-    p.add_argument("--out", type=Path, default=Path("zimage_out.png"), help="Output PNG path.")
-    p.add_argument(
-        "--cache-dir",
-        type=Path,
-        default=DEFAULT_CACHE,
-        help=f"QNN artifact cache (default: {DEFAULT_CACHE}).",
-    )
-    p.add_argument("--check", action="store_true", help="Verify HTP + artifacts and exit.")
-    p.add_argument("--dry-run", action="store_true", help="Load all sessions and run one step on noise.")
-    p.add_argument("--verbose", "-v", action="store_true", help="Log every diffusion step.")
-    p.add_argument("--version", action="version", version=f"zimage {__version__}")
+    p.add_argument("--out", type=Path, default=Path("zimage_out.png"),
+                   help="Output PNG path (default: zimage_out.png).")
+    p.add_argument("--cache-dir", type=Path, default=DEFAULT_CACHE,
+                   help=argparse.SUPPRESS)
+    p.add_argument("--check", action="store_true",
+                   help="Verify HTP + artifacts and exit.")
+    p.add_argument("--dry-run", action="store_true",
+                   help="Load all sessions and run one step on noise.")
+    p.add_argument("--fast", action="store_true",
+                   help="Disable CFG (skip negative prompt) for ~2x speed.")
+    p.add_argument("--verbose", "-v", action="store_true",
+                   help="Log every diffusion step.")
+    p.add_argument("--version", action="version", version=f"Zimage {__version__}")
     return p
 
 
@@ -47,7 +70,7 @@ def _do_check(cache_dir: Path) -> int:
     except NpuUnavailable as e:
         print(f"NPU gate FAILED: {e}", file=sys.stderr)
         return 2
-    print(f"QNNExecutionProvider OK")
+    print("QNNExecutionProvider OK")
     print(f"  soc_model = {info.soc_model}")
     print(f"  htp_arch  = {info.htp_arch}")
     print(f"  backend   = {info.backend_lib}")
@@ -95,15 +118,20 @@ def main(argv: list[str] | None = None) -> int:
         return 0
 
     if not args.prompt:
-        print("ERROR: prompt is required (or pass --check / --dry-run).", file=sys.stderr)
+        print("ERROR: prompt is required. Example: Zimage a calico cat at sunrise",
+              file=sys.stderr)
         return 1
+
+    prompt = " ".join(args.prompt).strip()
 
     try:
         image = pipe.generate(
-            args.prompt,
-            steps=args.steps,
+            prompt,
+            steps=DEFAULT_STEPS,
             size=args.size,
             seed=args.seed,
+            negative_prompt="" if args.fast else NEGATIVE_PROMPT,
+            guidance_scale=1.0 if args.fast else DEFAULT_GUIDANCE_SCALE,
         )
     except NpuUnavailable as e:
         print(f"Generation FAILED on NPU: {e}", file=sys.stderr)

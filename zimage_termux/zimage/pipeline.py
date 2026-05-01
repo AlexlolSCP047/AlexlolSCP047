@@ -161,6 +161,18 @@ class ZImagePipeline:
             _free(sess)
         return outputs[0].astype(np.float16)
 
+    def _encode_text_pair(self, prompt: str, negative: str) -> tuple[np.ndarray, np.ndarray]:
+        """Encode positive and negative prompts in one session lifetime to save load cost."""
+        pos_ids, pos_mask = self.tokenizer.encode(prompt)
+        neg_ids, neg_mask = self.tokenizer.encode(negative)
+        sess = make_session(self.artifacts[ARTIFACT_TEXT_ENCODER], self.htp)
+        try:
+            pos = sess.run(None, {"input_ids": pos_ids, "attention_mask": pos_mask})[0]
+            neg = sess.run(None, {"input_ids": neg_ids, "attention_mask": neg_mask})[0]
+        finally:
+            _free(sess)
+        return pos.astype(np.float16), neg.astype(np.float16)
+
     def _run_transformer(
         self,
         latent_seq: np.ndarray,
@@ -217,14 +229,25 @@ class ZImagePipeline:
         steps: int = 8,
         size: int = 1024,
         seed: int | None = None,
+        negative_prompt: str = "",
+        guidance_scale: float = 1.0,
     ) -> np.ndarray:
-        """Run end-to-end. Returns an HxWx3 uint8 RGB array."""
+        """Run end-to-end. Returns an HxWx3 uint8 RGB array.
+
+        When `guidance_scale > 1.0` and `negative_prompt` is non-empty, the
+        transformer is run twice per step (positive + negative) and the
+        velocities are combined as v = v_neg + s * (v_pos - v_neg). This
+        doubles the diffusion-loop wall time but pushes the result away
+        from the negative concept.
+        """
         if size % (self.cfg.vae_scale_factor * self.cfg.patch_size) != 0:
             raise ValueError(
                 f"--size {size} is not a multiple of "
                 f"vae_scale_factor*patch_size = "
                 f"{self.cfg.vae_scale_factor * self.cfg.patch_size}"
             )
+
+        cfg_active = guidance_scale > 1.0 and bool(negative_prompt)
 
         rng = np.random.default_rng(seed)
         latent_h = size // self.cfg.vae_scale_factor
@@ -233,8 +256,13 @@ class ZImagePipeline:
 
         scheduler = FlowMatchScheduler(self.scheduler_cfg, steps, seq_len)
 
-        log.info("Encoding text")
-        text_embeds = self._encode_text(prompt)
+        log.info("Encoding text (cfg=%.2f, negative=%s)",
+                 guidance_scale, "yes" if cfg_active else "no")
+        if cfg_active:
+            pos_embeds, neg_embeds = self._encode_text_pair(prompt, negative_prompt)
+        else:
+            pos_embeds = self._encode_text(prompt)
+            neg_embeds = None
 
         log.info("Initializing latent (size=%d, seq_len=%d)", size, seq_len)
         latent = rng.standard_normal(
@@ -246,12 +274,14 @@ class ZImagePipeline:
         log.info("Diffusion loop: %d steps", steps)
         for i, t in enumerate(scheduler.timesteps):
             log.info("  step %d/%d (sigma=%.4f)", i + 1, steps, scheduler.sigmas[i])
-            seq = _patchify(latent, self.cfg.patch_size)
-            v = self._run_transformer(
-                seq.astype(np.float16),
-                text_embeds,
-                np.array([t], dtype=np.float16),
-            )
+            seq = _patchify(latent, self.cfg.patch_size).astype(np.float16)
+            ts = np.array([t], dtype=np.float16)
+            v_pos = self._run_transformer(seq, pos_embeds, ts)
+            if cfg_active:
+                v_neg = self._run_transformer(seq, neg_embeds, ts)
+                v = v_neg + np.float16(guidance_scale) * (v_pos - v_neg)
+            else:
+                v = v_pos
             v_grid = _unpatchify(
                 v, self.cfg.patch_size, latent_h, latent_w, self.cfg.latent_channels
             )

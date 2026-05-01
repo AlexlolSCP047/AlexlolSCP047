@@ -19,7 +19,32 @@ At runtime, the [`zimage/`](./zimage) package loads them via
 `onnxruntime-qnn`, runs an 8-step flow-matching loop, and decodes a PNG —
 keeping memory under 16 GB by lazy-loading and freeing each ORT session.
 
-## Installation (on the phone)
+## One-shot install (on the phone)
+
+After you have a `zimage_qnn_v79.tar.zst` published somewhere reachable by
+HTTPS (see [Compile section](#compile-qnn-artifacts-on-a-workstation)), the
+entire install is a single command in Termux:
+
+```bash
+pkg install -y curl
+export ZIMAGE_ARTIFACTS_URL="https://your.host/zimage_qnn_v79.tar.zst"
+curl -fL https://raw.githubusercontent.com/AlexlolSCP047/AlexlolSCP047/claude/termux-npu-image-generator-AXOM5/zimage_termux/Zimage-install.sh | bash
+```
+
+That one script clones the repo, installs Python packages, symlinks
+`/vendor/lib64/libQnn*.so` into `$PREFIX/lib`, sets `ADSP_LIBRARY_PATH`,
+downloads + extracts the QNN context binaries, and runs `Zimage --check`
+to confirm the Hexagon HTP is healthy. After it finishes, the only command
+you need is:
+
+```bash
+Zimage a calico cat on a windowsill at sunrise
+```
+
+Quotes are optional — every word after `Zimage` is concatenated into the
+prompt. Output goes to `zimage_out.png` in the current directory.
+
+### Manual install (if you prefer)
 
 ```bash
 pkg install -y git
@@ -29,15 +54,29 @@ bash setup.sh
 source $PREFIX/etc/profile.d/zimage_qnn.sh
 ```
 
-`setup.sh` installs Python packages, symlinks `/vendor/lib64/libQnn*.so`
-into `$PREFIX/lib`, and sets `ADSP_LIBRARY_PATH` so the Hexagon stub finds
-its skel.
-
 If `pip install onnxruntime-qnn` fails (Termux's Bionic-with-prefix layout
 sometimes confuses the wheel's `dlopen`), use the manual route from
 <https://onnxruntime.ai/docs/execution-providers/QNN-ExecutionProvider.html>:
 download the arm64-v8a wheel from a recent release and
 `pip install <file>.whl` directly.
+
+## Quality preset (locked, not user-editable)
+
+`Zimage` always runs with these baked-in settings:
+
+- 8 diffusion steps (Z-Image-Turbo's NFE sweet spot)
+- 1024 px output (override with `--size`)
+- Mild CFG (guidance_scale = 2.0) using a fixed negative prompt that steers
+  the result away from common failure modes: low quality, jpeg artifacts,
+  bad anatomy, extra/missing limbs, watermarks, text/logos, oversaturation,
+  draft sketches, and so on.
+
+The negative prompt is a constant in
+[`zimage/quality.py`](./zimage/quality.py). It is intentionally not
+exposed via any flag — change it by editing that file and reinstalling.
+Because CFG runs the transformer twice per step, image latency roughly
+doubles vs. a no-negative run. Pass `--fast` to disable CFG when you want
+the unboosted speed.
 
 ## Compile QNN artifacts (on a workstation)
 
@@ -62,33 +101,39 @@ tar -I zstd -xf /sdcard/Download/zimage_qnn_v79.tar.zst -C ~/.cache/zimage/qnn/
 ## Running
 
 ```bash
-# Verify HTP gate + artifact presence:
-zimage --check
+# Just the prompt — quotes optional:
+Zimage a calico cat on a windowsill at sunrise
 
-# Sanity-check shapes without waiting 8 steps:
-zimage --dry-run
+# With a specific output path and seed:
+Zimage --out cat.png --seed 42 a calico cat on a windowsill at sunrise
 
-# Generate:
-zimage "a photo of a calico cat on a windowsill" \
-    --steps 8 --size 1024 --seed 42 --out cat.png
+# Speed mode (no CFG, no negative prompt):
+Zimage --fast a calico cat at sunrise
+
+# Diagnostics:
+Zimage --check
+Zimage --dry-run
 ```
 
-Expected latency on Snapdragon 8 Elite Gen 5: **15–40 s per 1024×1024 image**
-at 8 NFEs with W8A16 weights.
+Expected latency on Snapdragon 8 Elite Gen 5: **30–80 s per 1024×1024 image**
+with the locked CFG=2.0 quality preset (transformer runs twice per step).
+With `--fast` (CFG off) it drops to about **15–40 s**.
 
 ## CLI reference
 
 | Flag | Default | Notes |
 | --- | --- | --- |
-| `prompt` (positional) | — | Required for generation. |
-| `--steps` | `8` | Z-Image-Turbo's NFE sweet spot; values >16 give diminishing returns. |
+| `prompt` (positional, variadic) | — | All words after `Zimage` are joined into the prompt. |
 | `--size` | `1024` | Must be a multiple of `vae_scale_factor * patch_size` (typically 16). |
 | `--seed` | random | Integer for reproducible noise. |
-| `--out` | `zimage_out.png` | Output path. |
-| `--cache-dir` | `~/.cache/zimage/qnn` | QNN artifact location. |
+| `--out` | `zimage_out.png` | Output PNG path. |
+| `--fast` | off | Disable CFG (skip negative prompt) for ~2× speed. |
 | `--check` | — | Run NPU gate + artifact discovery; exit 0 on success. |
 | `--dry-run` | — | Load all sessions and run one step on noise. |
 | `--verbose` / `-v` | — | Log each diffusion step. |
+
+Steps, guidance scale, and negative prompt are **not** flags — they're
+locked in [`zimage/quality.py`](./zimage/quality.py).
 
 ## Failure modes
 

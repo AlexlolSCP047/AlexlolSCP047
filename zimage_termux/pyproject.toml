@@ -21,6 +21,7 @@ dependencies = [
 ]
 
 [project.scripts]
+Zimage = "zimage.cli:main"
 zimage = "zimage.cli:main"
 
 [tool.setuptools.packages.find]
