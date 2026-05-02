@@ -14,7 +14,9 @@ dependencies = [
     "numpy>=1.26",
     "pillow>=10.0",
     "tokenizers>=0.20",
-    "huggingface_hub>=0.25",
+    # huggingface_hub is intentionally NOT a runtime dep — it's only used by
+    # compile/export_onnx.py on the workstation. Pulling it into Termux drags
+    # in hf-xet (Rust + maturin) which we don't need at runtime.
     # onnxruntime-qnn must be installed separately on Termux because the pip
     # wheel layout assumes Android-NDK paths. setup.sh handles it; we keep it
     # out of `dependencies` so a normal `pip install .` does not silently fail.

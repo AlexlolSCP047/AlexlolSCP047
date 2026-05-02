@@ -27,8 +27,11 @@ echo "[3/6] Installing pure-Python dependencies via pip"
 # wheel + setuptools so the build backends already exist in the runtime env.
 python -m pip install --upgrade --no-input wheel setuptools
 
-# huggingface_hub is pure Python — installs cleanly.
-python -m pip install --no-input --no-build-isolation "huggingface_hub>=0.25"
+# Pre-install Rust build backends so tokenizers (and any other Rust-based
+# package we touch) can compile under --no-build-isolation. maturin pulls a
+# small prebuilt wheel for arm64; setuptools-rust is pure Python.
+python -m pip install --no-input --no-build-isolation \
+    "maturin>=1.5" "setuptools-rust>=1.7"
 
 # tokenizers needs Rust (installed above). Build is single-threaded by
 # default; expect 5–10 minutes on first run.
@@ -37,6 +40,12 @@ if ! python -c "import tokenizers" >/dev/null 2>&1; then
     CARGO_BUILD_JOBS=1 python -m pip install --no-input --no-build-isolation \
         "tokenizers>=0.20"
 fi
+
+# Note: we deliberately do NOT install huggingface_hub here. It's only used
+# by compile/export_onnx.py on the workstation. Newer huggingface_hub
+# pulls in hf-xet (Rust + maturin) which is unnecessary friction on Termux,
+# and the runtime never downloads from the Hub — tokenizer.json ships in
+# the QNN artifact tar.
 
 echo "[4/6] Installing onnxruntime-qnn (best-effort)"
 # Termux pip wheels for onnxruntime-qnn are best-effort. If pip fails, the
