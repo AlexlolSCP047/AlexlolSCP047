@@ -23,22 +23,22 @@ pkg install -y \
     python-numpy python-pillow rust
 
 echo "[3/6] Installing pure-Python dependencies via pip"
-# --no-build-isolation keeps pip from rebuilding cmake/ninja. We pre-install
-# wheel + setuptools so the build backends already exist in the runtime env.
+# wheel + setuptools first so the build backends already exist in the env.
 python -m pip install --upgrade --no-input wheel setuptools
 
-# Pre-install Rust build backends so tokenizers (and any other Rust-based
-# package we touch) can compile under --no-build-isolation. maturin pulls a
-# small prebuilt wheel for arm64; setuptools-rust is pure Python.
-python -m pip install --no-input --no-build-isolation \
-    "maturin>=1.5" "setuptools-rust>=1.7"
+# setuptools-rust has a universal Python wheel — no compilation. Pre-install
+# it so the rest of the chain has a known-good Rust build backend in the
+# runtime env if any package falls back to non-isolated build.
+python -m pip install --no-input setuptools-rust
 
-# tokenizers needs Rust (installed above). Build is single-threaded by
-# default; expect 5–10 minutes on first run.
+# tokenizers uses maturin as its build backend. We let pip use BUILD ISOLATION
+# here on purpose — it means pip resolves maturin → setuptools-rust in an
+# ephemeral env without cmake/ninja being involved, so we don't hit the OOM
+# we saw with numpy. The actual Rust compile of tokenizers is constrained to
+# one job by CARGO_BUILD_JOBS=1 to stay under the phone's RAM cap.
 if ! python -c "import tokenizers" >/dev/null 2>&1; then
-    echo "  Building tokenizers from source (uses Rust, ~5-10 min on first run)..."
-    CARGO_BUILD_JOBS=1 python -m pip install --no-input --no-build-isolation \
-        "tokenizers>=0.20"
+    echo "  Building tokenizers from source (Rust, single-threaded, ~10-20 min)..."
+    CARGO_BUILD_JOBS=1 python -m pip install --no-input "tokenizers>=0.20"
 fi
 
 # Note: we deliberately do NOT install huggingface_hub here. It's only used
