@@ -27,6 +27,7 @@ BRANCH="${ZIMAGE_BRANCH:-claude/termux-npu-image-generator-AXOM5}"
 INSTALL_DIR="${ZIMAGE_HOME:-${HOME}/zimage-termux}"
 CACHE_DIR="${HOME}/.cache/zimage/qnn"
 ARTIFACTS_URL="${ZIMAGE_ARTIFACTS_URL:-}"
+QNN_RUNTIME_URL="${ZIMAGE_QNN_RUNTIME_URL:-}"
 
 log()   { printf '\033[1;36m[Zimage-install]\033[0m %s\n' "$*"; }
 fatal() { printf '\033[1;31m[Zimage-install ERROR]\033[0m %s\n' "$*" >&2; exit 1; }
@@ -66,7 +67,26 @@ else
     fatal "Expected ${PROFILE} after setup.sh — did vendor_shim.sh succeed?"
 fi
 
-# 5. Download QNN artifacts
+# 5a. Download QNN runtime libs (libQnnHtp.so etc.) into $PREFIX
+# Stock Samsung firmware does NOT ship these; sideload from the QAIRT SDK
+# via compile/bundle_qnn_runtime.sh on a workstation, then host the tar.
+if [[ -n "${QNN_RUNTIME_URL}" ]]; then
+    pkg install -y zstd tar >/dev/null
+    RT_TAR="${PREFIX}/tmp/zimage_qnn_runtime.tar.zst"
+    log "Downloading QNN runtime libs from ${QNN_RUNTIME_URL}"
+    curl -fL --retry 4 --retry-delay 2 -o "${RT_TAR}" "${QNN_RUNTIME_URL}"
+    log "Extracting libQnn*.so into ${PREFIX}/lib"
+    tar -I zstd -xf "${RT_TAR}" -C "${PREFIX}/"
+    rm -f "${RT_TAR}"
+else
+    log "ZIMAGE_QNN_RUNTIME_URL not set — skipping QNN runtime download."
+    log "Stock Samsung firmware does NOT ship libQnnHtp.so; you must produce"
+    log "qnn_runtime_v79.tar.zst on a workstation (compile/bundle_qnn_runtime.sh)"
+    log "and either host it under ZIMAGE_QNN_RUNTIME_URL or extract it manually:"
+    log "  tar -I zstd -xf qnn_runtime_v79.tar.zst -C \$PREFIX/"
+fi
+
+# 5b. Download QNN artifacts (the per-block .qnn.bin files for Z-Image-Turbo)
 mkdir -p "${CACHE_DIR}"
 if [[ -n "${ARTIFACTS_URL}" ]]; then
     TAR_FILE="${CACHE_DIR}/zimage_qnn_artifacts.tar.zst"

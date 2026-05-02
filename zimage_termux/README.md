@@ -19,23 +19,38 @@ At runtime, the [`zimage/`](./zimage) package loads them via
 `onnxruntime-qnn`, runs an 8-step flow-matching loop, and decodes a PNG —
 keeping memory under 16 GB by lazy-loading and freeing each ORT session.
 
-## One-shot install (on the phone)
+## You will need TWO sideloaded bundles
 
-After you have a `zimage_qnn_v79.tar.zst` published somewhere reachable by
-HTTPS (see [Compile section](#compile-qnn-artifacts-on-a-workstation)), the
-entire install is a single command in Termux:
+Stock Samsung firmware on the S26 Ultra **does not** include the libraries
+the QNN ExecutionProvider needs to dlopen. Two separate tar files,
+produced once on a workstation, are required:
+
+1. **QNN runtime libs** (`qnn_runtime_v79.tar.zst`) — the actual
+   `libQnnHtp.so`, `libQnnSystem.so`, `libQnnHtpV79Stub.so`, and
+   `libQnnHtpV79Skel.so` extracted from the QAIRT SDK. These go into
+   `$PREFIX/lib` on the phone. Built once per HTP arch by
+   [`compile/bundle_qnn_runtime.sh`](./compile/bundle_qnn_runtime.sh).
+2. **Z-Image QNN artifacts** (`zimage_qnn_v79.tar.zst`) — the
+   per-block `.qnn.bin` context binaries for Z-Image-Turbo, plus
+   tokenizer.json, scheduler config, and pipeline_config.json. These go
+   into `~/.cache/zimage/qnn` on the phone. Built once per model + HTP
+   arch combo by the rest of [`compile/`](./compile).
+
+Both are produced on a Linux x86_64 workstation with Qualcomm's QAIRT
+SDK. After hosting them somewhere HTTPS-reachable:
+
+## One-shot install (on the phone)
 
 ```bash
 pkg install -y curl
+export ZIMAGE_QNN_RUNTIME_URL="https://your.host/qnn_runtime_v79.tar.zst"
 export ZIMAGE_ARTIFACTS_URL="https://your.host/zimage_qnn_v79.tar.zst"
 curl -fL https://raw.githubusercontent.com/AlexlolSCP047/AlexlolSCP047/claude/termux-npu-image-generator-AXOM5/zimage_termux/Zimage-install.sh | bash
 ```
 
-That one script clones the repo, installs Python packages, symlinks
-`/vendor/lib64/libQnn*.so` into `$PREFIX/lib`, sets `ADSP_LIBRARY_PATH`,
-downloads + extracts the QNN context binaries, and runs `Zimage --check`
-to confirm the Hexagon HTP is healthy. After it finishes, the only command
-you need is:
+That script clones the repo, installs Python packages, downloads + extracts
+both bundles, sets `ADSP_LIBRARY_PATH`, and runs `Zimage --check` to confirm
+the Hexagon HTP is healthy. After it finishes, the only command you need is:
 
 ```bash
 Zimage a calico cat on a windowsill at sunrise

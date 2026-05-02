@@ -18,6 +18,32 @@ HTP_BACKEND = "libQnnHtp.so"
 SYSTEM_LIB = "libQnnSystem.so"
 
 
+def _search_dirs() -> list[Path]:
+    """Where to look for QNN runtime libraries.
+
+    Stock Samsung firmware does NOT ship the QNN libraries in /vendor/lib64
+    — Qualcomm's QAIRT runtime libs (libQnnHtp*.so, libQnnSystem.so) come
+    from the QAIRT SDK and apps that use the Hexagon NPU bundle them in
+    their APK. So we search Termux's $PREFIX/lib first (where the user
+    sideloads them — see compile/bundle_qnn_runtime.sh), and fall back to
+    /vendor/lib64 in case a vendor build does ship them.
+    """
+    out: list[Path] = []
+    prefix = os.environ.get("PREFIX")
+    if prefix:
+        out.append(Path(prefix) / "lib")
+    out.append(VENDOR_LIB)
+    return [d for d in out if d.is_dir()]
+
+
+def _find_lib(name: str) -> Path | None:
+    for d in _search_dirs():
+        p = d / name
+        if p.is_file():
+            return p
+    return None
+
+
 class NpuUnavailable(RuntimeError):
     """Raised when the Hexagon HTP backend cannot be initialized."""
 
@@ -40,45 +66,55 @@ def _getprop(name: str) -> str:
     return out.strip()
 
 
-def _detect_htp_arch() -> str:
-    """Return the Hexagon HTP architecture string (e.g. 'v79').
+def _detect_htp_arch() -> tuple[str, Path]:
+    """Return (htp_arch, dir_where_stub_was_found).
 
-    Probes the on-device QNN libraries directly: every Snapdragon ships the
-    matching libQnnHtpV{NN}Stub.so, so we infer the arch from the highest
-    version present in /vendor/lib64. We cross-check with the SoC model when
-    possible, but the lib presence is the source of truth.
+    Every Snapdragon arch ships a matching libQnnHtpV{NN}Stub.so. We pick
+    the highest-numbered stub across all search dirs, and remember which
+    directory it came from so the matching skel/system libs are taken
+    from the same source.
     """
-    candidates = []
     pattern = re.compile(r"^libQnnHtpV(\d+)Stub\.so$")
-    for entry in VENDOR_LIB.glob("libQnnHtpV*Stub.so"):
-        m = pattern.match(entry.name)
-        if m:
-            candidates.append(int(m.group(1)))
-    if not candidates:
+    best: tuple[int, Path] | None = None
+    searched: list[Path] = []
+    for d in _search_dirs():
+        searched.append(d)
+        for entry in d.glob("libQnnHtpV*Stub.so"):
+            m = pattern.match(entry.name)
+            if not m:
+                continue
+            n = int(m.group(1))
+            if best is None or n > best[0]:
+                best = (n, d)
+    if best is None:
         raise NpuUnavailable(
-            f"No libQnnHtpV*Stub.so found in {VENDOR_LIB}. "
-            "This device has no Hexagon HTP runtime."
+            "No libQnnHtpV*Stub.so found in: "
+            + ", ".join(str(p) for p in searched)
+            + ". Sideload the QAIRT runtime libs into "
+            + (os.environ.get("PREFIX", "$PREFIX") + "/lib")
+            + " (see compile/bundle_qnn_runtime.sh and the README)."
         )
-    arch = f"v{max(candidates)}"
-    return arch
+    return f"v{best[0]}", best[1]
 
 
 def detect() -> HtpInfo:
-    """Locate vendor libs + HTP arch. Does NOT initialize ORT."""
-    backend = VENDOR_LIB / HTP_BACKEND
-    system = VENDOR_LIB / SYSTEM_LIB
-    if not backend.is_file():
-        raise NpuUnavailable(f"Missing {backend}. Hexagon backend not present.")
-    if not system.is_file():
-        raise NpuUnavailable(f"Missing {system}. QNN system lib not present.")
-
-    arch = _detect_htp_arch()
-    stub = VENDOR_LIB / f"libQnnHtpV{arch[1:]}Stub.so"
-    skel = VENDOR_LIB / f"libQnnHtpV{arch[1:]}Skel.so"
-    if not stub.is_file():
-        raise NpuUnavailable(f"Missing {stub} for detected arch {arch}.")
-    if not skel.is_file():
-        raise NpuUnavailable(f"Missing {skel} for detected arch {arch}.")
+    """Locate QNN libs + HTP arch. Does NOT initialize ORT."""
+    arch, source_dir = _detect_htp_arch()
+    backend = source_dir / HTP_BACKEND
+    system = source_dir / SYSTEM_LIB
+    stub = source_dir / f"libQnnHtpV{arch[1:]}Stub.so"
+    skel = source_dir / f"libQnnHtpV{arch[1:]}Skel.so"
+    for p, label in (
+        (backend, HTP_BACKEND),
+        (system, SYSTEM_LIB),
+        (stub, stub.name),
+        (skel, skel.name),
+    ):
+        if not p.is_file():
+            raise NpuUnavailable(
+                f"Missing {p}. Sideload it from QAIRT SDK into {source_dir} "
+                "(see compile/bundle_qnn_runtime.sh and the README)."
+            )
 
     soc = _getprop("ro.soc.model") or _getprop("ro.board.platform")
     return HtpInfo(
