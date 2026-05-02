@@ -60,6 +60,17 @@ sometimes confuses the wheel's `dlopen`), use the manual route from
 download the arm64-v8a wheel from a recent release and
 `pip install <file>.whl` directly.
 
+### Why we don't `pip install numpy`
+
+Termux Python 3.13 has no prebuilt numpy wheel, so plain `pip install numpy`
+falls back to a source build that pulls in cmake/ninja and OOM-kills `make`
+on the phone. `setup.sh` installs `python-numpy` and `python-pillow` from
+Termux's own binary repo (which has them prebuilt for the same Python ABI)
+and only pip-installs the pure-Python or Rust-buildable extras
+(`huggingface_hub`, `tokenizers`). `tokenizers` builds from source on first
+run — Rust is installed by `setup.sh` and the build takes 5–10 minutes
+single-threaded; subsequent runs are instant.
+
 ## Quality preset (locked, not user-editable)
 
 `Zimage` always runs with these baked-in settings:

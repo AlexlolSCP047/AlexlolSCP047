@@ -10,31 +10,53 @@ fi
 
 HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
-echo "[1/5] Updating Termux packages"
+echo "[1/6] Updating Termux package index"
 pkg update -y
-pkg install -y python python-pip git clang make pkg-config libjpeg-turbo libpng zstd binutils
 
-echo "[2/5] Upgrading pip and installing Python dependencies"
-python -m pip install --upgrade pip wheel
-python -m pip install --no-input "numpy>=1.26" "pillow>=10.0" "tokenizers>=0.20" "huggingface_hub>=0.25"
+echo "[2/6] Installing Termux base toolchain"
+# Native deps via Termux's binary packages — avoids pip building cmake/ninja
+# from source (which OOMs on phones). python-numpy and python-pillow are
+# prebuilt for Termux's Python; we deliberately do NOT pip-install them.
+pkg install -y \
+    python python-pip git clang make pkg-config \
+    libjpeg-turbo libpng zstd binutils \
+    python-numpy python-pillow rust
 
-echo "[3/5] Installing onnxruntime-qnn (best-effort)"
-# Termux pip wheels for onnxruntime-qnn are best-effort. If this fails,
-# follow README "Manual onnxruntime-qnn install" — download the arm64-v8a
-# wheel from https://onnxruntime.ai/ and `pip install <file>.whl` directly.
-if ! python -m pip install --no-input "onnxruntime-qnn"; then
-    echo "WARNING: pip install onnxruntime-qnn failed."
-    echo "         Follow the manual install path in README.md before running zimage --check."
+echo "[3/6] Installing pure-Python dependencies via pip"
+# --no-build-isolation keeps pip from rebuilding cmake/ninja. We pre-install
+# wheel + setuptools so the build backends already exist in the runtime env.
+python -m pip install --upgrade --no-input wheel setuptools
+
+# huggingface_hub is pure Python — installs cleanly.
+python -m pip install --no-input --no-build-isolation "huggingface_hub>=0.25"
+
+# tokenizers needs Rust (installed above). Build is single-threaded by
+# default; expect 5–10 minutes on first run.
+if ! python -c "import tokenizers" >/dev/null 2>&1; then
+    echo "  Building tokenizers from source (uses Rust, ~5-10 min on first run)..."
+    CARGO_BUILD_JOBS=1 python -m pip install --no-input --no-build-isolation \
+        "tokenizers>=0.20"
 fi
 
-echo "[4/5] Wiring Hexagon vendor libraries into Termux prefix"
+echo "[4/6] Installing onnxruntime-qnn (best-effort)"
+# Termux pip wheels for onnxruntime-qnn are best-effort. If pip fails, the
+# README documents the manual route: fetch the arm64-v8a wheel from the
+# Qualcomm developer portal and `pip install <file>.whl` directly.
+if ! python -m pip install --no-input --no-build-isolation "onnxruntime-qnn" 2>/dev/null; then
+    echo "  WARNING: pip install onnxruntime-qnn failed."
+    echo "  Follow the manual install path in README.md before running 'Zimage --check'."
+fi
+
+echo "[5/6] Wiring Hexagon vendor libraries into Termux prefix"
 bash "${HERE}/vendor_shim.sh"
 
-echo "[5/5] Installing the zimage package (editable)"
-python -m pip install --no-input -e "${HERE}"
+echo "[6/6] Installing the zimage package (editable)"
+python -m pip install --no-input --no-build-isolation -e "${HERE}"
 
 echo
 echo "Setup complete. Next steps:"
-echo "  1. Compile QNN context binaries on a workstation (see compile/README.md)"
-echo "  2. Copy the resulting tar to ~/.cache/zimage/qnn/ on the phone"
-echo "  3. Run:  zimage --check"
+echo "  1. Source the QNN profile:  source \$PREFIX/etc/profile.d/zimage_qnn.sh"
+echo "  2. Make sure ~/.cache/zimage/qnn/ has the QNN context binaries"
+echo "     (compile on a workstation per compile/README.md, or set"
+echo "      ZIMAGE_ARTIFACTS_URL and re-run Zimage-install.sh)"
+echo "  3. Run:  Zimage --check"
