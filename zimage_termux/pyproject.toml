@@ -1,0 +1,31 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "zimage-termux"
+version = "0.1.0"
+description = "Z-Image-Turbo runner for Termux on Snapdragon Hexagon NPU (NPU-only, fail-loud)"
+readme = "README.md"
+requires-python = ">=3.11"
+license = { text = "Apache-2.0" }
+authors = [{ name = "AlexlolSCP047" }]
+dependencies = [
+    "numpy>=1.26",
+    "pillow>=10.0",
+    "tokenizers>=0.20",
+    # huggingface_hub is intentionally NOT a runtime dep — it's only used by
+    # compile/export_onnx.py on the workstation. Pulling it into Termux drags
+    # in hf-xet (Rust + maturin) which we don't need at runtime.
+    # onnxruntime-qnn must be installed separately on Termux because the pip
+    # wheel layout assumes Android-NDK paths. setup.sh handles it; we keep it
+    # out of `dependencies` so a normal `pip install .` does not silently fail.
+]
+
+[project.scripts]
+Zimage = "zimage.cli:main"
+zimage = "zimage.cli:main"
+
+[tool.setuptools.packages.find]
+include = ["zimage*"]
+exclude = ["compile*"]
