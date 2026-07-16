@@ -71,3 +71,5 @@ jobs:
           name: btc-sister-report-${{ github.run_number }}
           path: btc_reports/
           retention-days: 30
+
+# Trigger manual test: 2026-07-16
