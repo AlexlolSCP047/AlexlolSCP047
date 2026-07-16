@@ -26,6 +26,14 @@ jobs:
         run: python btc_engine/btc_sister_engine.py
       - name: Show report
         run: cat btc_reports/latest.md
+      - name: Commit generated report
+        if: github.event_name == 'push' || github.event_name == 'workflow_dispatch'
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add btc_reports/
+          git diff --cached --quiet || git commit -m "Update BTC sister-model report [skip ci]"
+          git push origin HEAD:btc-sister-model-engine
       - name: Upload report artifact
         uses: actions/upload-artifact@v4
         with:
