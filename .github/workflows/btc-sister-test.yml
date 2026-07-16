@@ -1,0 +1,75 @@
+name: BTC Sister Models Daily
+
+on:
+  push:
+    branches:
+      - claude/professional-video-animation-SOLoe
+    paths:
+      - 'btc_engine/**'
+      - '.github/workflows/btc-sister-test.yml'
+  workflow_dispatch:
+  schedule:
+    # Ejecuta dos veces para cubrir horario de verano/invierno en Europe/Madrid.
+    # El paso "Check Madrid time" deja continuar solo cuando allí son las 22:30.
+    - cron: '30 20 * * *'
+    - cron: '30 21 * * *'
+
+permissions:
+  contents: write
+
+jobs:
+  analyse:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check Madrid time
+        id: madrid
+        shell: bash
+        run: |
+          if [ "${{ github.event_name }}" != "schedule" ]; then
+            echo "run=true" >> "$GITHUB_OUTPUT"
+          elif [ "$(TZ=Europe/Madrid date +%H:%M)" = "22:30" ]; then
+            echo "run=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "run=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      - uses: actions/checkout@v4
+        if: steps.madrid.outputs.run == 'true'
+
+      - uses: actions/setup-python@v5
+        if: steps.madrid.outputs.run == 'true'
+        with:
+          python-version: '3.12'
+          cache: 'pip'
+          cache-dependency-path: btc_engine/requirements.txt
+
+      - name: Install dependencies
+        if: steps.madrid.outputs.run == 'true'
+        run: pip install -r btc_engine/requirements.txt
+
+      - name: Run real Binance analysis
+        if: steps.madrid.outputs.run == 'true'
+        run: python btc_engine/btc_sister_engine.py
+
+      - name: Show report
+        if: steps.madrid.outputs.run == 'true'
+        run: cat btc_reports/latest.md
+
+      - name: Commit generated report
+        if: steps.madrid.outputs.run == 'true'
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add btc_reports/
+          git diff --cached --quiet || git commit -m "Update BTC sister-model report [skip ci]"
+          git push
+
+      - name: Upload report artifact
+        if: steps.madrid.outputs.run == 'true'
+        uses: actions/upload-artifact@v4
+        with:
+          name: btc-sister-report-${{ github.run_number }}
+          path: btc_reports/
+          retention-days: 30
+
+# Trigger manual test: 2026-07-16

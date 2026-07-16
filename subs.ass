@@ -1,0 +1,66 @@
+[Script Info]
+ScriptType: v4.00+
+PlayResX: 1280
+PlayResY: 720
+WrapStyle: 2
+ScaledBorderAndShadow: yes
+YCbCr Matrix: TV.601
+
+[V4+ Styles]
+Format: Name, Fontname, Fontsize, PrimaryColour, SecondaryColour, OutlineColour, BackColour, Bold, Italic, Underline, StrikeOut, ScaleX, ScaleY, Spacing, Angle, BorderStyle, Outline, Shadow, Alignment, MarginL, MarginR, MarginV, Encoding
+Style: Sub, Montserrat,64,&H00FFFFFF,&H0000FFFF,&H00000000,&H80000000,1,0,0,0,100,100,0,0,1,5,2,2,40,40,90,1
+Style: SubHL, Montserrat,64,&H0033FFFF,&H0000FFFF,&H00000000,&H80000000,1,0,0,0,100,100,0,0,1,5,2,2,40,40,90,1
+Style: TitleBig, Montserrat,96,&H00FFFFFF,&H000099FF,&H00000000,&H80000000,1,0,0,0,100,100,0,0,1,6,3,5,40,40,40,1
+Style: TitleSub, Montserrat,42,&H0033FFFF,&H000099FF,&H00000000,&H80000000,1,1,0,0,100,100,0,0,1,4,2,5,40,40,40,1
+Style: Outro, Montserrat,84,&H00FFFFFF,&H000099FF,&H00000000,&H80000000,1,0,0,0,100,100,0,0,1,6,3,5,40,40,40,1
+Style: TopBanner, Montserrat,38,&H0000FFFF,&H000099FF,&H00000000,&H80000000,1,0,0,0,100,100,0,0,1,3,2,8,40,40,30,1
+Style: Bullet, Montserrat,38,&H00FFFFFF,&H000099FF,&H00000000,&H80000000,1,0,0,0,100,100,0,0,1,3,2,4,40,40,40,1
+
+[Events]
+Format: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text
+Dialogue: 0,0:00:00.00,0:00:04.94,Sub,,0,0,0,,{\fad(150,120)\1c&H33FFFF&\2c&HFFFFFF&\3c&H000000&\bord5\shad2\b1\fscx70\fscy70\t(0,200,\fscx100\fscy100)}{\kf34}La {\kf68}casa {\kf34}de {\kf102}Renata {\kf68}Alba {\kf68}hace {\kf119}primero
+Dialogue: 0,0:00:04.94,0:00:09.88,Sub,,0,0,0,,{\fad(150,120)\1c&H33FFFF&\2c&HFFFFFF&\3c&H000000&\bord5\shad2\b1\fscx70\fscy70\t(0,200,\fscx100\fscy100)}{\kf47}que {\kf31}le {\kf63}dijo {\kf143}Martíador {\kf47}que {\kf47}fue {\kf111}buscado
+Dialogue: 0,0:00:09.88,0:00:12.00,Sub,,0,0,0,,{\fad(150,120)\1c&H33FFFF&\2c&HFFFFFF&\3c&H000000&\bord5\shad2\b1\fscx70\fscy70\t(0,200,\fscx100\fscy100)}{\kf16}3 {\kf81}veces {\kf114}naranja
+Dialogue: 0,0:00:12.05,0:00:13.91,Sub,,0,0,0,,{\fad(150,120)\1c&H33FFFF&\2c&HFFFFFF&\3c&H000000&\bord5\shad2\b1\fscx70\fscy70\t(0,200,\fscx100\fscy100)}{\kf20}que {\kf15}no {\kf27}hará {\kf34}falta {\kf15}en {\kf41}muchos {\kf34}años,
+Dialogue: 0,0:00:13.91,0:00:15.77,Sub,,0,0,0,,{\fad(150,120)\1c&H33FFFF&\2c&HFFFFFF&\3c&H000000&\bord5\shad2\b1\fscx70\fscy70\t(0,200,\fscx100\fscy100)}{\kf43}tendría {\kf15}el {\kf31}gusto {\kf15}no {\kf49}adentrar {\kf15}el {\kf24}aire
+Dialogue: 0,0:00:15.77,0:00:17.37,Sub,,0,0,0,,{\fad(150,120)\1c&H33FFFF&\2c&HFFFFFF&\3c&H000000&\bord5\shad2\b1\fscx70\fscy70\t(0,200,\fscx100\fscy100)}{\kf15}de {\kf15}la {\kf39}calle {\kf15}en {\kf31}esta {\kf39}casa,
+Dialogue: 0,0:00:17.37,0:00:18.97,Sub,,0,0,0,,{\fad(150,120)\1c&H33FFFF&\2c&HFFFFFF&\3c&H000000&\bord5\shad2\b1\fscx70\fscy70\t(0,200,\fscx100\fscy100)}{\kf29}haceros {\kf25}comida {\kf16}bien {\kf33}apiadado {\kf15}por {\kf42}ladrillos,
+Dialogue: 0,0:00:18.97,0:00:20.83,Sub,,0,0,0,,{\fad(150,120)\1c&H33FFFF&\2c&HFFFFFF&\3c&H000000&\bord5\shad2\b1\fscx70\fscy70\t(0,200,\fscx100\fscy100)}{\kf43}puertas {\kf15}y {\kf55}ventanas. {\kf18}Así {\kf24}pasó {\kf15}el {\kf24}gaso
+Dialogue: 0,0:00:20.83,0:00:22.70,Sub,,0,0,0,,{\fad(150,120)\1c&H33FFFF&\2c&HFFFFFF&\3c&H000000&\bord5\shad2\b1\fscx70\fscy70\t(0,200,\fscx100\fscy100)}{\kf15}en {\kf15}mi {\kf39}abuelo. {\kf45}Mientras {\kf22}podí {\kf50}empezaros {\kf15}a
+Dialogue: 0,0:00:22.70,0:00:23.50,Sub,,0,0,0,,{\fad(150,120)\1c&H33FFFF&\2c&HFFFFFF&\3c&H000000&\bord5\shad2\b1\fscx70\fscy70\t(0,200,\fscx100\fscy100)}{\kf37}guardar {\kf15}el {\kf31}rapaz.
+Dialogue: 0,0:00:23.55,0:00:25.45,Sub,,0,0,0,,{\fad(150,120)\1c&H33FFFF&\2c&HFFFFFF&\3c&H000000&\bord5\shad2\b1\fscx70\fscy70\t(0,200,\fscx100\fscy100)}{\kf15}En {\kf15}el {\kf30}arte {\kf22}ahí {\kf15}me {\kf76}interpiesa {\kf15}de
+Dialogue: 0,0:00:25.45,0:00:27.36,Sub,,0,0,0,,{\fad(150,120)\1c&H33FFFF&\2c&HFFFFFF&\3c&H000000&\bord5\shad2\b1\fscx70\fscy70\t(0,200,\fscx100\fscy100)}{\kf26}ello {\kf19}con {\kf15}el {\kf19}que {\kf32}podés {\kf39}cortar {\kf39}sablas
+Dialogue: 0,0:00:27.36,0:00:29.27,Sub,,0,0,0,,{\fad(150,120)\1c&H33FFFF&\2c&HFFFFFF&\3c&H000000&\bord5\shad2\b1\fscx70\fscy70\t(0,200,\fscx100\fscy100)}{\kf15}y {\kf43}embosos. {\kf32}Madra, {\kf27}Abena {\kf15}lo {\kf32}puedas {\kf38}seguir.
+Dialogue: 0,0:00:29.27,0:00:31.18,Sub,,0,0,0,,{\fad(150,120)\1c&H33FFFF&\2c&HFFFFFF&\3c&H000000&\bord5\shad2\b1\fscx70\fscy70\t(0,200,\fscx100\fscy100)}{\kf18}Lo {\kf45}mismo {\kf18}me {\kf36}das. {\kf36}Pues {\kf18}si {\kf18}no
+Dialogue: 0,0:00:31.18,0:00:32.54,Sub,,0,0,0,,{\fad(150,120)\1c&H33FFFF&\2c&HFFFFFF&\3c&H000000&\bord5\shad2\b1\fscx70\fscy70\t(0,200,\fscx100\fscy100)}{\kf26}querés {\kf43}gordarlas, {\kf17}irás {\kf15}sin {\kf35}gordado.
+Dialogue: 0,0:00:32.54,0:00:34.45,Sub,,0,0,0,,{\fad(150,120)\1c&H33FFFF&\2c&HFFFFFF&\3c&H000000&\bord5\shad2\b1\fscx70\fscy70\t(0,200,\fscx100\fscy100)}{\kf49}Total, {\kf24}así {\kf16}la {\kf49}puesta {\kf15}y {\kf16}la {\kf24}vas
+Dialogue: 0,0:00:34.45,0:00:35.00,Sub,,0,0,0,,{\fad(150,120)\1c&H33FFFF&\2c&HFFFFFF&\3c&H000000&\bord5\shad2\b1\fscx70\fscy70\t(0,200,\fscx100\fscy100)}{\kf15}a {\kf46}pasar.
+Dialogue: 0,0:00:46.00,0:00:47.71,Sub,,0,0,0,,{\fad(150,120)\1c&H33FFFF&\2c&HFFFFFF&\3c&H000000&\bord5\shad2\b1\fscx70\fscy70\t(0,200,\fscx100\fscy100)}{\kf18}de {\kf27}que {\kf27}con {\kf18}el {\kf54}cuento {\kf15}a {\kf18}tu
+Dialogue: 0,0:00:47.71,0:00:49.42,Sub,,0,0,0,,{\fad(150,120)\1c&H33FFFF&\2c&HFFFFFF&\3c&H000000&\bord5\shad2\b1\fscx70\fscy70\t(0,200,\fscx100\fscy100)}{\kf31}padre {\kf15}y {\kf15}no {\kf15}ya {\kf50}buscabas {\kf15}la {\kf44}hembra,
+Dialogue: 0,0:00:49.42,0:00:51.14,Sub,,0,0,0,,{\fad(150,120)\1c&H33FFFF&\2c&HFFFFFF&\3c&H000000&\bord5\shad2\b1\fscx70\fscy70\t(0,200,\fscx100\fscy100)}{\kf16}la {\kf16}ti {\kf16}tú {\kf16}tú {\kf16}la {\kf65}parabarú {\kf24}eso
+Dialogue: 0,0:00:51.14,0:00:52.85,Sub,,0,0,0,,{\fad(150,120)\1c&H33FFFF&\2c&HFFFFFF&\3c&H000000&\bord5\shad2\b1\fscx70\fscy70\t(0,200,\fscx100\fscy100)}{\kf35}tiene {\kf21}que {\kf15}la {\kf35}gente {\kf21}que {\kf15}la {\kf28}hace
+Dialogue: 0,0:00:52.85,0:00:54.08,Sub,,0,0,0,,{\fad(150,120)\1c&H33FFFF&\2c&HFFFFFF&\3c&H000000&\bord5\shad2\b1\fscx70\fscy70\t(0,200,\fscx100\fscy100)}{\kf15}con {\kf37}cosiles. {\kf15}¿A {\kf23}quién {\kf37}mirabas?
+Dialogue: 0,0:00:54.08,0:00:55.30,Sub,,0,0,0,,{\fad(150,120)\1c&H33FFFF&\2c&HFFFFFF&\3c&H000000&\bord5\shad2\b1\fscx70\fscy70\t(0,200,\fscx100\fscy100)}{\kf15}¿Y {\kf15}a {\kf45}quién? {\kf15}A {\kf45}nadie.
+Dialogue: 0,0:00:55.30,0:00:57.02,Sub,,0,0,0,,{\fad(150,120)\1c&H33FFFF&\2c&HFFFFFF&\3c&H000000&\bord5\shad2\b1\fscx70\fscy70\t(0,200,\fscx100\fscy100)}{\kf15}El {\kf54}presente {\kf20}con {\kf20}una {\kf34}mujer {\kf15}de {\kf15}tu
+Dialogue: 0,0:00:57.02,0:00:58.00,Sub,,0,0,0,,{\fad(150,120)\1c&H33FFFF&\2c&HFFFFFF&\3c&H000000&\bord5\shad2\b1\fscx70\fscy70\t(0,200,\fscx100\fscy100)}{\kf28}clase {\kf23}vaya {\kf17}con {\kf28}el...
+Dialogue: 0,0:00:00.50,0:00:59.35,TopBanner,,0,0,0,,{\fad(400,300)\t(0,800,\fscx105\fscy105)\an8\pos(640,55)\bord3\shad2\1c&H33FFFF&\3c&H000000&\b1}ESCUCHA ESTA HISTORIA
+Dialogue: 1,0:00:00.32,0:00:01.97,Sub,,0,0,0,,{\an5\pos(80,197)\frz-25\fs60\1c&H66CCFF&\3c&H000000&\bord3\fad(300,300)\t(0,400,\fscx140\fscy140)\t(400,800,\fscx100\fscy100)}❀
+Dialogue: 1,0:00:03.58,0:00:05.99,Sub,,0,0,0,,{\an5\pos(80,179)\frz25\fs60\1c&H33FFFF&\3c&H000000&\bord3\fad(300,300)\t(0,400,\fscx140\fscy140)\t(400,800,\fscx100\fscy100)}✪
+Dialogue: 1,0:00:06.06,0:00:07.66,Sub,,0,0,0,,{\an5\pos(1200,190)\frz-25\fs60\1c&H66CCFF&\3c&H000000&\bord3\fad(300,300)\t(0,400,\fscx140\fscy140)\t(400,800,\fscx100\fscy100)}♥
+Dialogue: 1,0:00:09.63,0:00:11.71,Sub,,0,0,0,,{\an5\pos(80,455)\frz25\fs60\1c&H66CCFF&\3c&H000000&\bord3\fad(300,300)\t(0,400,\fscx140\fscy140)\t(400,800,\fscx100\fscy100)}★
+Dialogue: 1,0:00:12.97,0:00:14.52,Sub,,0,0,0,,{\an5\pos(80,308)\frz-10\fs60\1c&HFFFF66&\3c&H000000&\bord3\fad(300,300)\t(0,400,\fscx140\fscy140)\t(400,800,\fscx100\fscy100)}✦
+Dialogue: 1,0:00:15.57,0:00:17.63,Sub,,0,0,0,,{\an5\pos(80,212)\frz-10\fs60\1c&H66CCFF&\3c&H000000&\bord3\fad(300,300)\t(0,400,\fscx140\fscy140)\t(400,800,\fscx100\fscy100)}❀
+Dialogue: 1,0:00:18.09,0:00:20.30,Sub,,0,0,0,,{\an5\pos(80,476)\frz25\fs60\1c&HFF99FF&\3c&H000000&\bord3\fad(300,300)\t(0,400,\fscx140\fscy140)\t(400,800,\fscx100\fscy100)}✪
+Dialogue: 1,0:00:21.77,0:00:23.74,Sub,,0,0,0,,{\an5\pos(1200,345)\frz-10\fs60\1c&H99FFFF&\3c&H000000&\bord3\fad(300,300)\t(0,400,\fscx140\fscy140)\t(400,800,\fscx100\fscy100)}✧
+Dialogue: 1,0:00:24.69,0:00:26.44,Sub,,0,0,0,,{\an5\pos(1200,428)\frz10\fs60\1c&HFFFF66&\3c&H000000&\bord3\fad(300,300)\t(0,400,\fscx140\fscy140)\t(400,800,\fscx100\fscy100)}⚡
+Dialogue: 1,0:00:27.28,0:00:29.76,Sub,,0,0,0,,{\an5\pos(80,422)\frz-10\fs60\1c&HFFFF66&\3c&H000000&\bord3\fad(300,300)\t(0,400,\fscx140\fscy140)\t(400,800,\fscx100\fscy100)}❀
+Dialogue: 1,0:00:30.15,0:00:32.14,Sub,,0,0,0,,{\an5\pos(80,502)\frz10\fs60\1c&H33FFFF&\3c&H000000&\bord3\fad(300,300)\t(0,400,\fscx140\fscy140)\t(400,800,\fscx100\fscy100)}❀
+Dialogue: 1,0:00:33.69,0:00:35.78,Sub,,0,0,0,,{\an5\pos(1200,195)\frz10\fs60\1c&H33FFFF&\3c&H000000&\bord3\fad(300,300)\t(0,400,\fscx140\fscy140)\t(400,800,\fscx100\fscy100)}⚡
+Dialogue: 1,0:00:36.69,0:00:38.26,Sub,,0,0,0,,{\an5\pos(1200,491)\frz25\fs60\1c&H66CCFF&\3c&H000000&\bord3\fad(300,300)\t(0,400,\fscx140\fscy140)\t(400,800,\fscx100\fscy100)}✿
+Dialogue: 1,0:00:39.71,0:00:42.10,Sub,,0,0,0,,{\an5\pos(1200,171)\frz10\fs60\1c&HFFFF66&\3c&H000000&\bord3\fad(300,300)\t(0,400,\fscx140\fscy140)\t(400,800,\fscx100\fscy100)}✧
+Dialogue: 1,0:00:42.61,0:00:44.60,Sub,,0,0,0,,{\an5\pos(80,553)\frz-10\fs60\1c&H99FFFF&\3c&H000000&\bord3\fad(300,300)\t(0,400,\fscx140\fscy140)\t(400,800,\fscx100\fscy100)}♥
+Dialogue: 1,0:00:45.39,0:00:47.81,Sub,,0,0,0,,{\an5\pos(1200,201)\frz25\fs60\1c&HFF99FF&\3c&H000000&\bord3\fad(300,300)\t(0,400,\fscx140\fscy140)\t(400,800,\fscx100\fscy100)}✪
+Dialogue: 1,0:00:48.54,0:00:50.93,Sub,,0,0,0,,{\an5\pos(1200,441)\frz25\fs60\1c&H99FFFF&\3c&H000000&\bord3\fad(300,300)\t(0,400,\fscx140\fscy140)\t(400,800,\fscx100\fscy100)}❀
+Dialogue: 1,0:00:51.68,0:00:53.56,Sub,,0,0,0,,{\an5\pos(80,237)\frz-10\fs60\1c&H33FFFF&\3c&H000000&\bord3\fad(300,300)\t(0,400,\fscx140\fscy140)\t(400,800,\fscx100\fscy100)}✧
+Dialogue: 1,0:00:54.23,0:00:55.96,Sub,,0,0,0,,{\an5\pos(1200,461)\frz10\fs60\1c&HFF99FF&\3c&H000000&\bord3\fad(300,300)\t(0,400,\fscx140\fscy140)\t(400,800,\fscx100\fscy100)}✿
+Dialogue: 1,0:00:57.00,0:00:58.92,Sub,,0,0,0,,{\an5\pos(1200,472)\frz10\fs60\1c&H66CCFF&\3c&H000000&\bord3\fad(300,300)\t(0,400,\fscx140\fscy140)\t(400,800,\fscx100\fscy100)}✧

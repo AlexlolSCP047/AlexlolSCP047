@@ -1,0 +1,21 @@
+[Script Info]
+ScriptType: v4.00+
+PlayResX: 1280
+PlayResY: 720
+WrapStyle: 0
+ScaledBorderAndShadow: yes
+
+[V4+ Styles]
+Format: Name, Fontname, Fontsize, PrimaryColour, SecondaryColour, OutlineColour, BackColour, Bold, Italic, Underline, StrikeOut, ScaleX, ScaleY, Spacing, Angle, BorderStyle, Outline, Shadow, Alignment, MarginL, MarginR, MarginV, Encoding
+Style: TitleBig, Montserrat,110,&H00FFFFFF,&H000099FF,&H00000000,&H80000000,1,0,0,0,100,100,0,0,1,8,4,5,40,40,40,1
+Style: TitleSub, Montserrat,52,&H0033FFFF,&H000099FF,&H00000000,&H80000000,1,1,0,0,100,100,0,0,1,4,2,5,40,40,40,1
+Style: TitleHash, Montserrat,40,&H00FFFFFF,&H000099FF,&H00000000,&H80000000,1,0,0,0,100,100,0,0,1,4,2,5,40,40,40,1
+
+[Events]
+Format: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text
+Dialogue: 0,0:00:00.00,0:00:03.00,TitleBig,,0,0,0,,{\an5\pos(640,290)\fad(200,200)\bord10\shad6\1c&HFFFFFF&\3c&H1A1A1A&\fscx20\fscy20\frz-25\t(0,500,\fscx100\fscy100\frz0)}ESCUCHA\NESTA HISTORIA
+Dialogue: 0,0:00:00.50,0:00:03.00,TitleSub,,0,0,0,,{\an5\pos(640,500)\fad(400,200)\bord4\shad2\1c&H33FFFF&\3c&H000000&\b1}— UN CUENTO PARA NO OLVIDAR —
+Dialogue: 0,0:00:00.80,0:00:03.00,TitleHash,,0,0,0,,{\an5\pos(640,590)\fad(500,200)\bord3\1c&HFFFFFF&\3c&H000000&}#historias #abuelos #cuentos
+Dialogue: 1,0:00:00.00,0:00:03.00,TitleBig,,0,0,0,,{\an5\pos(120,360)\frz25\fad(0,400)\t(0,2800,\frz385)\fs220\1c&HFFCC33&\3c&H000000&\bord4\alpha&H99&}★
+Dialogue: 1,0:00:00.00,0:00:03.00,TitleBig,,0,0,0,,{\an5\pos(1160,360)\frz-15\fad(0,400)\t(0,2800,\frz-375)\fs220\1c&HFF66CC&\3c&H000000&\bord4\alpha&H99&}✦
+Dialogue: 2,0:00:00.00,0:00:03.00,TitleHash,,0,0,0,,{\an5\pos(640,140)\fs60\1c&HFFFFFF&\3c&H000000&\bord3\fad(200,200)\t(0,2800,\fscx115\fscy115)}▶ PRESENTA

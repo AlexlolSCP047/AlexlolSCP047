@@ -1,0 +1,8 @@
+models/
+preview/
+audio.wav
+intro.mp4
+main.mp4
+outro.mp4
+*.pyc
+__pycache__/
