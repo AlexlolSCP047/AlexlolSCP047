@@ -1,0 +1,33 @@
+name: BTC Sister Models Test
+
+on:
+  push:
+    branches: [btc-sister-model-engine]
+  pull_request:
+    branches: [claude/professional-video-animation-SOLoe]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: btc-sister-model-engine
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install dependencies
+        run: pip install -r btc_engine/requirements.txt
+      - name: Run real Binance test
+        run: python btc_engine/btc_sister_engine.py
+      - name: Show report
+        run: cat btc_reports/latest.md
+      - name: Upload report artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: btc-sister-report
+          path: btc_reports/
